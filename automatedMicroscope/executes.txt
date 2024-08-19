@@ -13,3 +13,16 @@ sudo apt-get upgrade python3-venv
 python3 -m venv venv
 source venv/bin/activate
 sudo apt-get update
+sudo pip3 install RPi.GPIO
+sudo apt-get update
+sudo apt install python3-gpiozero
+wget https://files.waveshare.com/upload/1/1f/Stepper_Motor_HAT_Code.zip
+unzip Stepper_Motor_HAT_Code.zip
+sudo chmod 777 -R Stepper_Motor_HAT_Code
+cd Stepper_Motor_HAT_Code/Raspberry\ PI/
+cd bcm2835/
+make clean
+make
+sudo ./motor
+cd python/
+sudo python3 test.py
