@@ -6,6 +6,7 @@ import os
 import pygame.camera
 import sys
 steplang = 2500
+dr = "/media/pi/PortableSSD/" 
 
 if len(sys.argv) != 3:
     print("Usage: slidename dimesion")
@@ -15,7 +16,6 @@ if isinstance(int(sys.argv[2]), int) == False:
     exit(1)
 dim = int(sys.argv[2])
 
-dr = "/media/pi/PortableSSD/" 
 dirname = "Slide"+sys.argv[1]
 print("Starting slide:")
 print(sys.argv[1])
