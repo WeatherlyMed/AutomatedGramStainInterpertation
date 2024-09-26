@@ -5,6 +5,7 @@ import time
 import os
 import pygame.camera
 import sys
+steplang = 2500
 
 if len(sys.argv) != 3:
     print("Usage: slidename dimesion")
@@ -24,8 +25,6 @@ try:
 except:
     print("Slide with this number has been processed")
     exit(1)
-
-steplang = 2500
 
 def take(camera, a, b):
     # Use a breakpoint in the code line below to debug your script.
@@ -53,7 +52,7 @@ if  camlist:
 	cam = pygame.camera.Camera(camlist[0], (1920,1080))
 	cam.start()
 else:
-	print("\error cam")
+	print("\n Error: Camera Refused to Open")
 	exit(1)
 try:
     Motor1 = DRV8825(dir_pin=13, step_pin=19, enable_pin=12, mode_pins=(16, 17, 20))
@@ -63,9 +62,10 @@ try:
     
 except:
     RPIO.cleanup()
-    print("\nFailure Mounting")
+    print("\n Error: Failure Mounting Motors")
     cam.stop()
     exit(1)
+print("\n Startup Successful: Beginning Scanning")
 
 for i in range(dim):
     for k in range(dim):
@@ -75,7 +75,8 @@ for i in range(dim):
     moveUp()
     moveRight()
 moveDown()
-print("Great Success")
+
+print("Slide Scanned Successfully")
 Motor1.Stop()
 Motor2.Stop()
 cam.stop()
