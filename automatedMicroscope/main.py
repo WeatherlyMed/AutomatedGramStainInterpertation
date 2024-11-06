@@ -34,18 +34,50 @@ def fileName(a,b):
     num = str((a*100)+b)
     name = (dr+'/'+dirname+'/' + 'ISR' + num + '.png')
     return name
-def moveRight():
+def moveRight(steplang):
     Motor2.TurnStep(Dir='forward', steps=steplang, stepdelay=0.00)
     Motor2.Stop()
-def moveLeft():
+def moveLeft(steplang):
     Motor2.TurnStep(Dir='backward', steps=(steplang), stepdelay=0.00)
     Motor2.Stop()
-def moveDown():
+def moveDown(steplang):
     Motor1.TurnStep(Dir='forward', steps=steplang, stepdelay=0.00)
     Motor1.Stop()
-def moveUp():
+def moveUp(steplang):
     Motor1.TurnStep(Dir='backward', steps=(steplang), stepdelay=0.0)
     Motor1.Stop()
+def intialSet():
+    print("Adjust to Upper left corner of slide")
+        pygame.init()
+    screen = pygame.display.set_mode((640, 480))
+    pygame.display.set_caption('Slide Adjustment')
+    steplang = 10  # Define a default step length
+
+    adjusting = True
+    while adjusting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    moveLeft(steplang)
+                    total_length_adjustedx -= steplang
+                elif event.key == pygame.K_RIGHT:
+                    moveRight(steplang)
+                    total_length_adjustedx += steplang
+                elif event.key == pygame.K_UP:
+                    moveUp(steplang)
+                    total_length_adjustedy -= steplang
+                elif event.key == pygame.K_DOWN:
+                    moveDown(steplang)
+                    total_length_adjustedy += steplang
+                elif event.key == pygame.K_RETURN:
+                    adjusting = False
+    pygame.quit()
+    return total_length_adjustedx, total_length_adjustedy
+
+
 pygame.camera.init()
 camlist = pygame.camera.list_cameras()
 if  camlist:
@@ -67,14 +99,17 @@ except:
     exit(1)
 print("\n Startup Successful: Beginning Scanning")
 
+total_length_adjusted = intialSet()
+stepx = total_length_adjusted[0] / dim
+stepy = total_length_adjusted[1] / dim
 for i in range(dim):
     for k in range(dim):
-        moveDown()
+        moveDown(stepy)
         time.sleep(0.5)
         take(cam,i,k)
-    moveUp()
-    moveRight()
-moveDown()
+    moveUp(stepx)
+    moveRight(total_length_adjusted[0])
+moveDown(total_length_adjusted[1])
 
 print("Slide Scanned Successfully")
 Motor1.Stop()
