@@ -52,7 +52,8 @@ def intialSet():
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption('Slide Adjustment')
     steplang = 10  # Define a default step length
-
+    total_length_adjustedx = 0
+    total_length_adjustedy = 0
     adjusting = True
     while adjusting:
         for event in pygame.event.get():
@@ -83,6 +84,7 @@ camlist = pygame.camera.list_cameras()
 if  camlist:
 	cam = pygame.camera.Camera(camlist[0], (1920,1080))
 	cam.start()
+	print("camera initalised")
 else:
 	print("\n Error: Camera Refused to Open")
 	exit(1)
