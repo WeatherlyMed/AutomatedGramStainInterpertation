@@ -48,7 +48,7 @@ def moveUp(steplang):
     Motor1.Stop()
 def intialSet():
     print("Adjust to Upper left corner of slide")
-        pygame.init()
+    pygame.init()
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption('Slide Adjustment')
     steplang = 10  # Define a default step length
