@@ -55,6 +55,13 @@ def intialSet():
     total_length_adjustedx = 0
     total_length_adjustedy = 0
     adjusting = True
+    camlist = pygame.camera.list_cameras()
+    if camlist:
+        cam = pygame.camera.Camera(camlist[0])
+	cam.start()
+    else:
+	print("\n Error: Camera Failed to Open")
+	return
     while adjusting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -75,6 +82,11 @@ def intialSet():
                     total_length_adjustedy += steplang
                 elif event.key == pygame.K_RETURN:
                     adjusting = False
+		if cam.query_image():
+	            frame = cam.get_image()
+	            screen.blit(frame, (0, 0))
+	            pygame.display.update()
+    cam.stop()
     pygame.quit()
     return total_length_adjustedx, total_length_adjustedy
 
