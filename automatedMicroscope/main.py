@@ -5,7 +5,7 @@ import time
 import os
 import pygame.camera
 import sys
-steplang = 2500
+steplang = 250
 dr = "/media/pi/PortableSSD/" 
 
 if len(sys.argv) != 3:
@@ -35,23 +35,23 @@ def fileName(a,b):
     name = (dr+'/'+dirname+'/' + 'ISR' + num + '.png')
     return name
 def moveRight(steplang):
-    Motor2.TurnStep(Dir='forward', steps=steplang, stepdelay=0.00)
+    Motor2.TurnStep(Dir='forward', steps=steplang, stepdelay=0.005)
     Motor2.Stop()
 def moveLeft(steplang):
-    Motor2.TurnStep(Dir='backward', steps=(steplang), stepdelay=0.00)
+    Motor2.TurnStep(Dir='backward', steps=(steplang), stepdelay=0.005)
     Motor2.Stop()
 def moveDown(steplang):
-    Motor1.TurnStep(Dir='forward', steps=steplang, stepdelay=0.00)
+    Motor1.TurnStep(Dir='forward', steps=steplang, stepdelay=0.005)
     Motor1.Stop()
 def moveUp(steplang):
-    Motor1.TurnStep(Dir='backward', steps=(steplang), stepdelay=0.0)
+    Motor1.TurnStep(Dir='backward', steps=(steplang), stepdelay=0.005)
     Motor1.Stop()
 def intialSet():
     print("Adjust to Upper left corner of slide")
     pygame.init()
     screen = pygame.display.set_mode((640, 480))
     pygame.display.set_caption('Slide Adjustment')
-    steplang = 10  # Define a default step length
+    steplang = 100  # Define a default step length
     total_length_adjustedx = 0
     total_length_adjustedy = 0
     adjusting = True
@@ -70,16 +70,16 @@ def intialSet():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     moveLeft(steplang)
-                    total_length_adjustedx -= steplang
+                    total_length_adjustedx += steplang
                 elif event.key == pygame.K_RIGHT:
                     moveRight(steplang)
-                    total_length_adjustedx += steplang
+                    total_length_adjustedx -= steplang
                 elif event.key == pygame.K_UP:
                     moveUp(steplang)
-                    total_length_adjustedy -= steplang
+                    total_length_adjustedy += steplang
                 elif event.key == pygame.K_DOWN:
                     moveDown(steplang)
-                    total_length_adjustedy += steplang
+                    total_length_adjustedy -= steplang
                 elif event.key == pygame.K_RETURN:
                     adjusting = False
 		if cam.query_image():
@@ -103,8 +103,8 @@ else:
 try:
     Motor1 = DRV8825(dir_pin=13, step_pin=19, enable_pin=12, mode_pins=(16, 17, 20))
     Motor2 = DRV8825(dir_pin=24, step_pin=18, enable_pin=4, mode_pins=(21, 22, 27))
-    Motor1.SetMicroStep('softward','1/32step')
-    Motor2.SetMicroStep('softward','1/32step')
+    Motor1.SetMicroStep('softward','fullstep')
+    Motor2.SetMicroStep('softward','fullstep')
     
 except:
     RPIO.cleanup()
@@ -114,8 +114,8 @@ except:
 print("\n Startup Successful: Beginning Scanning")
 
 total_length_adjusted = intialSet()
-stepx = total_length_adjusted[0] / dim
-stepy = total_length_adjusted[1] / dim
+stepx = abs(int(dim))
+stepy = abs(int(dim))
 for i in range(dim):
     for k in range(dim):
         moveDown(stepy)
